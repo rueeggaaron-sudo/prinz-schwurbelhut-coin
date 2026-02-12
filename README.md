@@ -81,3 +81,10 @@ npx hardhat verify --network <network> <DEPLOYED_CONTRACT_ADDRESS> <TREASURY_ADD
 
 - **Logo:** `assets/prinz-schwurbelhut.jpg`
 - **Raw Link:** `https://github.com/<YOUR_USERNAME>/<YOUR_REPO>/raw/main/assets/prinz-schwurbelhut.jpg` (Replace with your repository details)
+
+## Deployments
+
+### BSC Testnet
+- Contract: 0x17b315E0200698B2b5Cd8267B8C35e38a0629CF9
+- Explorer: https://testnet.bscscan.com/address/0x17b315E0200698B2b5Cd8267B8C35e38a0629CF9
+
