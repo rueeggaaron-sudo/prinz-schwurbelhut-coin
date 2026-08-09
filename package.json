@@ -10,8 +10,8 @@
     "deploy:mainnet": "hardhat run scripts/deploy.js --network bscMainnet"
   },
   "devDependencies": {
-    "hardhat": "^2.19.0",
-    "@nomicfoundation/hardhat-toolbox": "^4.0.0"
+    "hardhat": "^3.12.0",
+    "@nomicfoundation/hardhat-toolbox": "^7.0.0"
   },
   "dependencies": {
     "dotenv": "^16.3.1",
