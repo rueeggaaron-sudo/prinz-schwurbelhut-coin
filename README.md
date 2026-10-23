@@ -68,10 +68,20 @@ npm ci --ignore-scripts
 Do not create or load a `.env` file for local compile/test checks. The deploy
 commands below are separate release actions and are not part of local CI.
 
-### Offline local compile and test inventory
+### Local compile and test inventory
 
-The package includes `solcjs` 0.8.26 through its locked Hardhat dependency.
-Compile locally without an RPC endpoint or compiler download:
+The project compile gate uses the exact compiler and optimizer configuration
+from `hardhat.config.js`:
+
+```bash
+npm run compile
+```
+
+Hardhat may download the official solc binary if it is not already cached.
+This is a compiler download only; it does not use the configured chain RPCs.
+
+The dependency tree also includes `solcjs` 0.8.26 for an offline syntax and
+bytecode compile, but this is not the project's exact 0.8.20 compile gate:
 
 ```bash
 mkdir -p /tmp/pshc-solc-output
@@ -80,13 +90,10 @@ mkdir -p /tmp/pshc-solc-output
   -o /tmp/pshc-solc-output contracts/PrinzSchwurbelhutCoin.sol
 ```
 
-The contract's pragma permits 0.8.26, but `hardhat.config.js` pins 0.8.20;
-this offline check does not prove byte-for-byte equivalence with the configured
-Hardhat compiler. That exact compiler build remains an open gate unless it is
-already available locally. The `test/` directory currently contains no tests.
-`npm test -- --no-compile` reports zero passing tests and is only a test-suite
-inventory check, not behavioral coverage. Run `npm audit --audit-level=low`
-separately and keep the security result red if advisories remain.
+The `test/` directory currently contains no tests. `npm test -- --no-compile`
+reports zero passing tests and is only a test-suite inventory check, not
+behavioral coverage. Run `npm audit --audit-level=low` separately and keep the
+security result red if advisories remain.
 
 ### Install Dependencies
 
@@ -114,11 +121,9 @@ Fill in:
 
 ### Compile
 
-For an offline local compile with the compiler already included in the
-dependency tree, use the `solcjs` command above. `npx hardhat compile` follows
-the configured 0.8.20 compiler version and may need to download it when that
-compiler is not cached locally; this has not been run as part of the offline
-validation.
+Run `npm run compile` to use the exact configured compiler version and
+optimizer settings. For an offline syntax-only alternative, use the `solcjs`
+0.8.26 command above; it does not replace the configured compiler gate.
 
 ### Test
 

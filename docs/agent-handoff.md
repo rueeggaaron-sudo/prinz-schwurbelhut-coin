@@ -7,8 +7,14 @@ and Node.js 22.12 or 24 (verified local runtime: 22.23.4). Run
 `npm ci --ignore-scripts` with a task-private `HOME` and npm cache. Do not load
 `.env` values for local checks.
 
-The locked Hardhat tree includes local `solcjs` 0.8.26. An offline syntax and
-bytecode compilation can run with:
+Run `npm run compile` for the configured Hardhat compiler, solc 0.8.20, and
+optimizer settings. On this candidate Hardhat downloaded the official 0.8.20
+compiler binary and compiled the contract plus six imported Solidity files
+successfully. The compile task only used the compiler download; configured
+network URLs were not contacted and there was no `.env` file.
+
+The locked Hardhat tree also includes local `solcjs` 0.8.26 for an offline
+syntax/bytecode check (not a substitute for the configured compiler gate):
 
 ```bash
 ./node_modules/.bin/solcjs --base-path . --include-path node_modules \
@@ -16,13 +22,11 @@ bytecode compilation can run with:
   -o /tmp/pshc-solc-output contracts/PrinzSchwurbelhutCoin.sol
 ```
 
-The contract pragma is `^0.8.20`, while `hardhat.config.js` selects 0.8.20.
-The local package compiler is 0.8.26, so the offline compile does not verify
-the exact configured compiler build. The test directory has no committed test
-cases; `npm test -- --no-compile` returned `0 passing`, which is inventory only
-and not contract behavior coverage. `npm audit --audit-level=low` returned 61
-advisories on 2026-10-23 (18 low, 12 moderate, 30 high, 1 critical). No
-dependency changes were made for this CI documentation task.
+The test directory has no committed test cases; `npm test -- --no-compile`
+returned `0 passing`, which is inventory only and not contract behavior
+coverage. `npm audit --audit-level=low` returned 61 advisories on 2026-10-23
+(18 low, 12 moderate, 30 high, 1 critical). No dependency changes were made
+for this CI documentation task.
 
 ## Current candidate
 
