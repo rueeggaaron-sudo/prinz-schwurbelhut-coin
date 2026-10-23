@@ -56,10 +56,49 @@ Use at your own risk.
 
 ## Setup
 
+For repository and Git work, follow the central
+[GIT_HANDOFF.md](https://github.com/rueeggaaron-sudo/orchestrator/blob/main/GIT_HANDOFF.md).
+The local validation reference is Node.js 22.23.4 (Node.js 22.12 or 24).
+Install locked dependencies with lifecycle scripts disabled:
+
+```bash
+npm ci --ignore-scripts
+```
+
+Do not create or load a `.env` file for local compile/test checks. The deploy
+commands below are separate release actions and are not part of local CI.
+
+### Local compile and test inventory
+
+The project compile gate uses the exact compiler and optimizer configuration
+from `hardhat.config.js`:
+
+```bash
+npm run compile
+```
+
+Hardhat may download the official solc binary if it is not already cached.
+This is a compiler download only; it does not use the configured chain RPCs.
+
+The dependency tree also includes `solcjs` 0.8.26 for an offline syntax and
+bytecode compile, but this is not the project's exact 0.8.20 compile gate:
+
+```bash
+mkdir -p /tmp/pshc-solc-output
+./node_modules/.bin/solcjs --base-path . --include-path node_modules \
+  --optimize --optimize-runs 200 --bin --abi \
+  -o /tmp/pshc-solc-output contracts/PrinzSchwurbelhutCoin.sol
+```
+
+The `test/` directory currently contains no tests. `npm test -- --no-compile`
+reports zero passing tests and is only a test-suite inventory check, not
+behavioral coverage. Run `npm audit --audit-level=low` separately and keep the
+security result red if advisories remain.
+
 ### Install Dependencies
 
 ```bash
-npm install
+npm ci --ignore-scripts
 ```
 
 ### Configuration
@@ -82,9 +121,9 @@ Fill in:
 
 ### Compile
 
-```bash
-npx hardhat compile
-```
+Run `npm run compile` to use the exact configured compiler version and
+optimizer settings. For an offline syntax-only alternative, use the `solcjs`
+0.8.26 command above; it does not replace the configured compiler gate.
 
 ### Test
 
